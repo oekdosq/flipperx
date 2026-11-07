@@ -92,7 +92,12 @@ jobs:
           fi
 
       - name: Sign Release APK
-        if: ${{ secrets.SIGNING_KEY != '' && secrets.KEY_ALIAS != '' && secrets.KEY_PASSWORD != '' && secrets.STORE_PASSWORD != '' }}
+        if: env.SIGNING_KEY != '' && env.KEY_ALIAS != '' && env.KEY_PASSWORD != '' && env.STORE_PASSWORD != ''
+        env:
+          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          STORE_PASSWORD: ${{ secrets.STORE_PASSWORD }}
         uses: r0adkll/sign-android-release@v1
         id: sign_apk
         with:
@@ -103,7 +108,7 @@ jobs:
           keyPassword: ${{ secrets.KEY_PASSWORD }}
 
       - name: Verify Signed APK
-        if: ${{ steps.sign_apk.outputs.signedReleaseFile != '' }}
+        if: steps.sign_apk.outputs.signedReleaseFile != ''
         run: |
           SIGNED_APK="${{ steps.sign_apk.outputs.signedReleaseFile }}"
           echo "Signed APK: $SIGNED_APK"
@@ -127,7 +132,7 @@ jobs:
           retention-days: 30
 
       - name: Upload Signed Release APK
-        if: ${{ steps.sign_apk.outputs.signedReleaseFile != '' }}
+        if: steps.sign_apk.outputs.signedReleaseFile != ''
         uses: actions/upload-artifact@v4
         with:
           name: flipperx-release-signed
@@ -135,7 +140,7 @@ jobs:
           retention-days: 30
 
       - name: Upload SHA-256
-        if: ${{ steps.sign_apk.outputs.signedReleaseFile != '' }}
+        if: steps.sign_apk.outputs.signedReleaseFile != ''
         uses: actions/upload-artifact@v4
         with:
           name: flipperx-sha256
