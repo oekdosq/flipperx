@@ -4,14 +4,15 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.semanticBoundaries.semantics
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.flipperx.mobile.ui.screens.DashboardScreen
+import androidx.compose.ui.unit.sp
+import com.flipperx.mobile.ui.screens.*
 
 enum class ToolCategory {
     RED_TEAM,
@@ -29,19 +30,24 @@ fun ToolCategoryIndicator(selected: ToolCategory, onSelect: (ToolCategory) -> Un
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color(0x111722)),
+            .background(Color(0xFF111722)),
         horizontalArrangement = Arrangement.SpaceEvenly,
-        verticalArrangement = Arrangement.Center
+        verticalAlignment = Alignment.CenterVertically
     ) {
         ToolCategory.values().forEach { category ->
             val isSelected = selected == category
             Button(
                 onClick = { onSelect(category) },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (isSelected) Color(0xFF8A00) else Color.Transparent,
-                    contentColor = if (isSelected) Color(0x080B12) else Color(0xA0A8B5)
+                    containerColor = if (isSelected) Color(0xFFFF8A00) else Color.Transparent,
+                    contentColor = if (isSelected) Color(0xFF080B12) else Color(0xFFA0A8B5)
                 ),
-                elevation = ButtonElevation.None
+                elevation = ButtonDefaults.elevatedButtonElevation(
+                    disabledElevation = 0.dp,
+                    pressedElevation = 2.dp,
+                    focusedElevation = 2.dp,
+                    hoveredElevation = 2.dp
+                )
             ) {
                 Text(
                     text = when (category) {
@@ -54,9 +60,9 @@ fun ToolCategoryIndicator(selected: ToolCategory, onSelect: (ToolCategory) -> Un
                         ToolCategory.NETWORK_UTILS -> "Network Utils"
                         ToolCategory.HISTORY_REPORT -> "History/Report"
                     },
-                    color = if (isSelected) Color(0x080B12) else Color(0xA0A8B5),
+                    color = if (isSelected) Color(0xFF080B12) else Color(0xFFA0A8B5),
                     fontWeight = FontWeight.Normal,
-                    style = MaterialTheme.typography.h6
+                    fontSize = 12.sp
                 )
             }
         }
@@ -79,9 +85,9 @@ fun MainScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0x080B12)),
+                .background(Color(0xFF080B12)),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterStart
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             ToolCategoryIndicator(
                 selected = selectedCategory.value,
