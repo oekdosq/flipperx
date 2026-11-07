@@ -44,12 +44,16 @@ object RealToolHandlers {
         val btManager = context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         val adapter = btManager.adapter
         
+        val hasBle = context.packageManager.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)
+        val adapterAvailable = adapter != null
+        val bleEnabled = adapter?.isEnabled == true
+        
         return buildString {
             append("BLE Scanner Status\n")
             append("==================\n")
-            append("Bluetooth Hardware: ${if (context.packageManager.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) \"PRESENT\" else \"ABSENT\"}\n")
-            append("Bluetooth Adapter: ${if (adapter != null) \"AVAILABLE\" else \"NOT AVAILABLE\"}\n")
-            append("Bluetooth Enabled: ${if (adapter?.isEnabled == true) \"YES\" else \"NO\"}\n")
+            append("Bluetooth Hardware: ${if (hasBle) "PRESENT" else "ABSENT"}\n")
+            append("Bluetooth Adapter: ${if (adapterAvailable) "AVAILABLE" else "NOT AVAILABLE"}\n")
+            append("Bluetooth Enabled: ${if (bleEnabled) "YES" else "NO"}\n")
             append("\nImplementation Status: INCOMPLETE\n")
             append("Permission Status: NEEDS_PERMISSION (BLUETOOTH_SCAN, BLUETOOTH_CONNECT)\n")
             append("Hardware Status: NEEDS_HARDWARE (BLE capable device)\n")
