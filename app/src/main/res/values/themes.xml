@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.FlipperX" parent="Theme.Material3.Dark.NoActionBar">
+    <style name="Theme.FlipperX" parent="Theme.Material3.Dark">
         <item name="colorPrimary">@color/tactical_primary</item>
         <item name="colorSecondary">@color/tactical_accent</item>
         <item name="android:windowBackground">@color/tactical_bg</item>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
     </style>
 </resources>
