@@ -130,6 +130,8 @@ object ToolRegistry {
 
     fun getAllTools(): List<ToolDefinition> = tools.values.toList()
 
+    val allTools: List<ToolDefinition> = tools.values.toList()
+
     fun getTool(id: ToolId): ToolDefinition? = tools[id]
 
     fun getToolsByCategory(category: ToolCategory): List<ToolDefinition> =
