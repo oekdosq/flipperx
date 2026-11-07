@@ -36,9 +36,7 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
         with:
-          api-level: ${{ env.ANDROID_SDK_VERSION }}
-          build-tools-version: ${{ env.ANDROID_BUILD_TOOLS_VERSION }}
-          ndk-version: 'r27c'
+          packages: platforms;android-${{ env.ANDROID_SDK_VERSION }} build-tools;${{ env.ANDROID_BUILD_TOOLS_VERSION }} ndk;r27c
           cmdline-tools-version: 'latest'
 
       - name: Grant execute permission for gradlew
