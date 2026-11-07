@@ -1,6 +1,7 @@
 package com.flipperx.mobile.ui.screens
 
 import android.content.Context
+import android.net.wifi.ScanResult
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,11 +18,15 @@ import com.flipperx.mobile.ui.viewmodel.NetworkToolsViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import kotlinx.coroutines.launch
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.TextFieldDefaults
 
 @Composable
 fun RedTeamScreen(context: Context) {
@@ -33,8 +38,7 @@ fun RedTeamScreen(context: Context) {
     ) {
         Text(text = "Red Team - Network Reconnaissance", color = Color(0xFF8A00), fontSize = 20.sp, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(16.dp))
-        
-        // Simple DNS lookup tool demonstration
+
         var input by remember { mutableStateOf("") }
         var output by remember { mutableStateOf("") }
         var status by remember { mutableStateOf("") }
@@ -61,84 +65,57 @@ fun RedTeamScreen(context: Context) {
                             val result = networkToolsViewModel.executeDnsLookup(input)
                             output = "DNS Lookup Result:\n${result.output}"
                             status = "Confirmed"
-                            Spacer(modifier = Modifier.height(8.dp))
-            Text(text = output, color = Color(0xFFFFFF))
-            Text(text = status, color = Color(0xA0A8B5))
-        } catch (e: Exception) {
+                        } catch (e: Exception) {
                             output = "Error: ${e.message}"
                             status = "Failed"
-                            Spacer(modifier = Modifier.height(8.dp))
-            Text(text = output, color = Color(0xFFFFFF))
-            Text(text = status, color = Color(0xA0A8B5))
-        }
-                        Spacer(modifier = Modifier.height(8.dp))
-            Text(text = output, color = Color(0xFFFFFF))
-            Text(text = status, color = Color(0xA0A8B5))
-        }
-                    Spacer(modifier = Modifier.height(8.dp))
-            Text(text = output, color = Color(0xFFFFFF))
-            Text(text = status, color = Color(0xA0A8B5))
-        },
+                        }
+                    }
+                },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8A00), contentColor = Color(0x080B12)),
                 shape = RoundedCornerShape(4.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(text = "Run DNS Lookup", color = Color(0x080B12))
-                Spacer(modifier = Modifier.height(8.dp))
+            }
+            Spacer(modifier = Modifier.height(8.dp))
             Text(text = output, color = Color(0xFFFFFF))
             Text(text = status, color = Color(0xA0A8B5))
-        }
-        // Port Scan Demo
-        var portInput by remember { mutableStateOf("") }
-        var port by remember { mutableStateOf("") }
 
-        OutlinedTextField(
-            value = portInput,
-            onValueChange = { portInput = it },
-            label = { Text(text = "Port", color = Color(0xA0A8B5)) },
-            modifier = Modifier.fillMaxWidth().background(Color(0x111722))
-        )
-        Button(
-            onClick = {
-                coroutineScope.launch {
-                    status = "Scanning..."
-                    try {
-                        val result = networkToolsViewModel.executePortScan(input, portInput.toInt())
-                        output = "Scan Result: ${result.output}"
-                        status = "Done"
-                        Spacer(modifier = Modifier.height(8.dp))
-            Text(text = output, color = Color(0xFFFFFF))
-            Text(text = status, color = Color(0xA0A8B5))
-        } catch (e: Exception) {
-                        output = "Err: ${e.message}"
-                        status = "Failed"
-                        Spacer(modifier = Modifier.height(8.dp))
-            Text(text = output, color = Color(0xFFFFFF))
-            Text(text = status, color = Color(0xA0A8B5))
-        }
-                    Spacer(modifier = Modifier.height(8.dp))
-            Text(text = output, color = Color(0xFFFFFF))
-            Text(text = status, color = Color(0xA0A8B5))
-        }
-                Spacer(modifier = Modifier.height(8.dp))
-            Text(text = output, color = Color(0xFFFFFF))
-            Text(text = status, color = Color(0xA0A8B5))
-        },
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8A00), contentColor = Color(0x080B12)),
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Scan Port")
+            // Port Scan Demo
+            var portInput by remember { mutableStateOf("") }
+            Spacer(modifier = Modifier.height(16.dp))
+            OutlinedTextField(
+                value = portInput,
+                onValueChange = { portInput = it },
+                label = { Text(text = "Port", color = Color(0xA0A8B5)) },
+                modifier = Modifier.fillMaxWidth().background(Color(0x111722))
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Button(
+                onClick = {
+                    coroutineScope.launch {
+                        status = "Scanning..."
+                        try {
+                            val result = networkToolsViewModel.executePortScan(input, portInput.toIntOrNull() ?: 0)
+                            output = "Scan Result: ${result.output}"
+                            status = "Done"
+                        } catch (e: Exception) {
+                            output = "Err: ${e.message}"
+                            status = "Failed"
+                        }
+                    }
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8A00), contentColor = Color(0x080B12)),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Scan Port")
+            }
             Spacer(modifier = Modifier.height(8.dp))
             Text(text = output, color = Color(0xFFFFFF))
             Text(text = status, color = Color(0xA0A8B5))
         }
     }
 }
-
-@Composable
-import android.net.wifi.ScanResult
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateListOf
 
 @Composable
 fun BlueTeamScreen(context: Context) {
@@ -150,7 +127,7 @@ fun BlueTeamScreen(context: Context) {
         val results = wifiManager.scanResults
         scanResults.clear()
         scanResults.addAll(results)
-        status = if (results.any { it.capabilities.contains("Open") && it.level > -50 }) 
+        status = if (results.any { it.capabilities.contains("Open") && it.level > -50 })
             "Potential Rogue AP detected" else "Network Clean"
     }
 
@@ -205,7 +182,7 @@ fun HardwareScreen(context: Context) {
 @Composable
 fun NetworkUtilsScreen(context: Context) {
     val networkToolsViewModel: NetworkToolsViewModel = viewModel(factory = ToolViewModelFactory(context.applicationContext as android.app.Application))
-    
+
     Column(modifier = Modifier.fillMaxSize().background(Color(0x080B12)).padding(16.dp)) {
         Text(text = "Network Utilities", color = Color(0xFF8A00), fontSize = 20.sp, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(16.dp))
