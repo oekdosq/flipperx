@@ -1,0 +1,58 @@
+# FlipperX Full Edition - Git Ignore Rules
+
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+*.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local config
+local.properties
+*.local.properties
+
+# Signing & Secrets
+*.jks
+*.keystore
+*.properties.secret
+keystore/
+signing/
+*.pem
+*.key
+
+# Environment
+.env
+.env.local
+*.env
+
+# Test outputs
+*.ec
+coverage/
+*.html.report
+*.xml.report
+
+# APK outputs (keep release artifacts in CI only, not repo)
+*.apk
+*.aab
+
+# Build cache
+*.log
+*.tmp
+*.temp
+
+# Kotlin
+*.kt.metadata
+
+# MacOS
+*.swp
+*~
