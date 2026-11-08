@@ -91,6 +91,4 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
 }
 
-ksp {
-    correctErrorTypes.set(true)
-}
+// removed ksp block
