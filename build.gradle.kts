@@ -4,10 +4,3 @@ plugins {
     id("org.jetbrains.kotlin.android") version "1.9.24" apply false
     id("com.google.devtools.ksp") version "1.9.24-1.0.20" apply false
 }
-
-ext {
-    composeBom = "2024.08.00"
-    roomVersion = "2.6.1"
-    kotlinVersion = "1.9.24"
-    kspVersion = "1.9.24-1.0.20"
-}
