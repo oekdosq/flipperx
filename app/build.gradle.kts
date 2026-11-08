@@ -92,5 +92,5 @@ dependencies {
 }
 
 ksp {
-    correctErrorTypes = true
+    correctErrorTypes.set(true)
 }
